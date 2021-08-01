@@ -3,8 +3,8 @@ const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const db = require('./../db');
 
-const getSeatFromLink = (req) => (
-  db.seats.find(seat => seat.id === parseInt(req.params.id))
+const getElementFromLink = (req) => (
+  db.seats.find(element => element.id === parseInt(req.params.id))
 );
   
 router.route('/seats').get((req, res) => {
@@ -12,27 +12,25 @@ router.route('/seats').get((req, res) => {
 });
 
 router.route('/seats/:id').get((req, res) => {
-  res.json(getSeatFromLink(req));
+  res.json(getElementFromLink(req));
 });
 
 router.route('/seats').post((req, res) => {
   const { day, seat, client, email } = req.body;
-  const newSeat = { id: uuidv4(), day: day, seat: seat, client: client, email: email };
-  db.seats.push(newSeat);
+  const newElement = { id: uuidv4(), day: day, seat: seat, client: client, email: email };
+  db.seats.push(newElement);
   res.send( { message: 'OK' } );
 });
 
 router.route('/seats/:id').put((req, res) => {
   const { day, seat, client, email } = req.body;
-  getSeatFromLink(req).day = day;
-  getSeatFromLink(req).seat = seat;
-  getSeatFromLink(req).client = client;
-  getSeatFromLink(req).email = email;
+  const updatedElement = ({ id: req.params.id, day: day, seat: seat, client: client, email: email });
+  db.seats[db.seats.indexOf(getElementFromLink(req))] = updatedElement;
   res.send( { message: 'OK' } );
 });
 
 router.route('/seats/:id').delete((req, res) => {
-  db.seats.splice(db.seats.indexOf(getSeatFromLink(req)), 1);
+  db.seats.splice(db.seats.indexOf(getElementFromLink(req)), 1);
   res.send( { message: 'OK' } );
 });
 
