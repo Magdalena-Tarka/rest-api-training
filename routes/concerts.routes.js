@@ -19,19 +19,19 @@ router.route('/concerts').post((req, res) => {
   const { performer, genre, price, day, image } = req.body;
   const newElement = { id: uuidv4(), performer: performer, genre: genre, price: price, day: day, image: image };
   db.concerts.push(newElement);
-  res.send( { message: 'OK' } );
+  res.json( { message: 'OK' } );
 });
 
 router.route('/concerts/:id').put((req, res) => {
   const { performer, genre, price, day, image } = req.body;
   const updatedElement = ({ id: req.params.id, performer: performer, genre: genre, price: price, day: day, image: image });
   db.concerts[db.concerts.indexOf(getElementFromLink(req))] = updatedElement;
-  res.send( { message: 'OK' } );
+  res.json( { message: 'OK' } );
 });
 
 router.route('/concerts/:id').delete((req, res) => {
   db.concerts.splice(db.concerts.indexOf(getElementFromLink(req)), 1);
-  res.send( { message: 'OK' } );
+  res.json( { message: 'OK' } );
 });
 
 module.exports = router;
