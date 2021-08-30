@@ -32,7 +32,7 @@ app.use((req, res) => {
   res.status(404).send( { message: 'Not found....' } );
 })
 
-const dbURI = process.env.NODE_ENV === 'production' ? 'mongodb+srv://Magdalena:Obinna129@cluster0.si5h3.mongodb.net/NewWaveDB?retryWrites=true&w=majority' : 'mongodb://localhost:27017/NewWaveDB';
+const dbURI = process.env.NODE_ENV === 'production' ? `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.si5h3.mongodb.net/NewWaveDB?retryWrites=true&w=majority` : 'mongodb://localhost:27017/NewWaveDB';
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
