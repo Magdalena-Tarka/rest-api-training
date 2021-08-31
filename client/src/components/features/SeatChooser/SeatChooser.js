@@ -11,7 +11,7 @@ class SeatChooser extends React.Component {
     loadSeats();
     setInterval(loadSeats, 120000);
 
-    this.socket = io.connect('http://localhost:8000/' || process.env.NODE_ENV, {
+    this.socket = io.connect(process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:8000', {
       transports: ['websocket'],
     });
     this.socket.on('seatsUpdated', (seats) => {
@@ -52,7 +52,7 @@ class SeatChooser extends React.Component {
         { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].success) && <div className="seats">{[...Array(50)].map((x, i) => prepareSeat(i+1) )}</div>}
         { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].pending) && <Progress animated color="primary" value={50} /> }
         { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].error) && <Alert color="warning">Couldn't load seats...</Alert> }
-        <p>Free seats: {seats.filter(item => item.day === chosenDay).length}/50</p>
+        <p>Free seats: {50 - (seats.filter(item => item.day === chosenDay).length)}/50</p>
       </div>
     )
   };
